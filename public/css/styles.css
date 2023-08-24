@@ -1,71 +1,82 @@
-:root {
-    color-scheme: light dark;
+@font-face {
+  font-family: "GeoSansLight";
+  src: url("https://localstorage.tools/game/font/GeosansLight.ttf");
+}
 
-    --wide: 12px;
-    --narrow: 4px;
-    --border-radius: 4px;
+:root {
+  color-scheme: light dark;
+
+  --wide: 12px;
+  --narrow: 4px;
+  --border-radius: 4px;
+
+  --empty: black;
+  --border: white;
+  --highlight: #fef300;
+  --first: radial-gradient(#95c25a, #66902e);
+  --second: radial-gradient(#7251b8, #52368f);
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: "GeoSansLight", sans-serif;
 }
 
 body {
-    margin: 0;
+  margin: 0;
 }
 
 .game__main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: var(--wide);
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: var(--wide);
 }
 
 .board {
-    display: grid;
-    width: calc(100vmin - 5vmax);
-    height: calc(100vmin - 5vmax);
-    justify-content: center;
-    align-content: center;
-}
-
-.square {
-    border: 1px solid fieldtext;
+  display: grid;
+  width: calc(100vmin - 5vmax);
+  height: calc(100vmin - 5vmax);
+  justify-content: center;
+  align-content: center;
+  column-gap: var(--narrow);
+  row-gap: var(--narrow);
+  background: gray;
 }
 
 .controls {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    width: 100%;
-    column-gap: var(--narrow);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  column-gap: var(--narrow);
 }
 
 .button {
-    padding: var(--narrow);
+  padding: var(--narrow);
 }
 
 .square {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
 }
 .square--first {
-    background-color: lightblue;
-    color: black;
+  background: var(--first);
+  color: black;
 }
 .square--second {
-    background-color: salmon;
-    color: black;
+  background: var(--second);
+  color: black;
 }
 .square--empty {
-    background-color: black;
+  background: var(--empty);
+  filter: none;
 }
 .square--selected {
-    border-color: orange;
-    border-width: 2px;
+  color: white;
+  filter: drop-shadow(var(--narrow) 0 var(--wide) var(--highlight));
 }
 .square--legal {
-    background-color: aquamarine;
+  filter: drop-shadow(var(--narrow) 0 var(--wide) var(--border));
 }

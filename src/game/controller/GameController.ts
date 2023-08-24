@@ -12,7 +12,7 @@ export class GameController {
     this.game.onSelect(x, y)
   }
   undo() {
-    console.log("controller.undo")
+    this.game.undo()
   }
   endGame() {
     this.game.onEnd()

@@ -20,9 +20,7 @@ export class TextSquareDrawer implements SquareDrawer {
         uiSquare.textContent = this.pieceToTextMap.get(modelSquare.piece) || ""
         uiSquare.className = "square"
         uiSquare.classList.add(`square--${!modelSquare.player ? 'empty' : modelSquare.player.id ? 'first' : 'second'}`)
-        if(modelSquare.selected) {
-            console.log('something is selected', modelSquare);
-            
+        if(modelSquare.selected) {            
             uiSquare.classList.add("square--selected")
         }
     }

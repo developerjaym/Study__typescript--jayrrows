@@ -9,7 +9,8 @@ export enum GameEventType {
   MOVE,
   ERROR,
   END,
-  UNSELECT
+  UNSELECT,
+  UNDO
 }
 
 export interface GameEvent {
@@ -17,5 +18,6 @@ export interface GameEvent {
     activePlayer: Player,
     board: Board,
     message: string,
-    legalMoves: Square[]
+    legalMoves: Square[],
+    players: Player[]
 }

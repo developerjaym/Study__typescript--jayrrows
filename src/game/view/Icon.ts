@@ -5,5 +5,10 @@ export enum Icon {
     CELEBRATE = "🎉",
     MESSAGE = "✉",
     CLOSE = "X",
-    HELP = "i"
+    HELP = "i",
+    KING_PIECE = "👑",
+    ALL_PIECE = "✷",
+    HORIZONTAL_PIECE = "⇆",
+    VERTICAL_PIECE = "⇵",
+    DIAGONAL_PIECE = "╳"
 }

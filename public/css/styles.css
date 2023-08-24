@@ -12,9 +12,14 @@
 
   --empty: black;
   --border: white;
+  --legal: white;
   --highlight: #fef300;
-  --first: radial-gradient(#95c25a, #66902e);
-  --second: radial-gradient(#7251b8, #52368f);
+  --first-light: #95c25a;
+  --first-dark: #66902e;
+  --first: radial-gradient(var(--first-light),var(--first-dark) );
+  --second-light: #7251b8;
+  --second-dark: #52368f;
+  --second: radial-gradient(var(--second-light), var(--second-dark));
 }
 
 * {
@@ -60,6 +65,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: calc(100vmin / 15);
+  border-radius: var(--border-radius);
 }
 .square--first {
   background: var(--first);
@@ -75,10 +81,10 @@ body {
 }
 .square--selected {
   color: white;
-  filter: drop-shadow(var(--narrow) 0 var(--wide) var(--highlight));
+  box-shadow:  0px 0px var(--wide) var(--narrow) var(--highlight);
 }
 .square--legal {
-  filter: drop-shadow(var(--narrow) 0 var(--wide) var(--border));
+  box-shadow: inset 0px 0px var(--wide) var(--narrow) var(--legal);
 }
 
 

@@ -23,7 +23,7 @@ export class ControlsUI implements Viewable {
     onChange(event: GameEvent): void {
     }
     private showHelpDialog() {
-        this.htmlService.showDialog("Help", "It's a pretty simple game. You'll get it.", Icon.HELP)
+        this.htmlService.showDialog("Help", `Green goes first. The ${Icon.ALL_PIECE} piece can move one space in any direction. The first one you move will become a king (${Icon.KING_PIECE}). Kings can't move. Then Purple does the same. Then the next ${Icon.ALL_PIECE} you move will get promoted to a different piece depending on the direction you move. If you move diagonally, it will become a piece that can only move diagonally.`, Icon.HELP)
 
     }
 }

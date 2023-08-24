@@ -1,14 +1,13 @@
 import { Observable } from "../../observer/observer.js";
 import injector from "../../service/Injector.js";
 import { Environment } from "../../service/environment/Environment.js";
-import { BoardHelper } from "./Board.js";
+import { BoardHelper } from "./BoardHelper.js";
 import { GameEvent, GameEventType } from "./GameEvent.js";
 import { GameState } from "./GameState.js";
 import { Snapshotter } from "./GameStateSnapshotter.js";
 import { Piece } from "./Piece.js";
 import { PlayerHelper } from "./Player.js";
 import { Square } from "./Square.js";
-
 
 export class Game extends Observable<GameEvent> {
   private state: GameState;
@@ -19,23 +18,23 @@ export class Game extends Observable<GameEvent> {
   ) {
     super();
     this.state = existingState || this.getFreshState();
-    this.snapshotter = new Snapshotter()
-    this.subscribe(this.snapshotter)
+    this.snapshotter = new Snapshotter();
+    this.subscribe(this.snapshotter);
   }
-  onStart() {
+  start() {
     this.notifyAll(
       structuredClone({
         type: GameEventType.START,
         message: "Game Started!",
-        legalMoves: BoardHelper.determineLegalMoves(
+        legalMoves: BoardHelper.determineLegalSelections(
           this.state.board,
           this.state.activePlayer
         ),
-        ...this.state
+        ...this.state,
       })
     );
   }
-  onSelect(x: number, y: number): void {
+  pick(x: number, y: number): void {
     const previouslySelectedSquare = BoardHelper.selectedSquare(
       this.state.board
     );
@@ -45,18 +44,7 @@ export class Game extends Observable<GameEvent> {
       thisSquare.player === this.state.activePlayer
     ) {
       // Player is likely trying to change their selection
-      BoardHelper.unselectAll(this.state.board);
-      this.notifyAll(
-        structuredClone({
-          type: GameEventType.UNSELECT,
-          message: "OK",
-          legalMoves: BoardHelper.determineLegalMoves(
-            this.state.board,
-            this.state.activePlayer
-          ),
-          ...this.state,
-        })
-      );
+      this.unselect();
     } else if (previouslySelectedSquare) {
       this.move(previouslySelectedSquare, thisSquare);
     } else {
@@ -64,13 +52,13 @@ export class Game extends Observable<GameEvent> {
     }
   }
   undo() {
-    if(this.snapshotter.hasPreviousStates()) {
-      this.state = this.snapshotter.pop()
+    if (this.snapshotter.hasPreviousStates()) {
+      this.state = this.snapshotter.pop();
       this.notifyAll(
         structuredClone({
           type: GameEventType.UNDO,
           message: "Undone!",
-          legalMoves: BoardHelper.determineLegalMoves(
+          legalMoves: BoardHelper.determineLegalSelections(
             this.state.board,
             this.state.activePlayer
           ),
@@ -78,12 +66,12 @@ export class Game extends Observable<GameEvent> {
         })
       );
     } else {
-      this.onEnd()
+      this.end();
     }
   }
-  onEnd() {
+  end() {
     this.state = this.getFreshState();
-    this.onStart();
+    this.start();
   }
   private move(originSquare: Square, destinationSquare: Square) {
     if (BoardHelper.isLegalMove(originSquare, destinationSquare)) {
@@ -117,7 +105,7 @@ export class Game extends Observable<GameEvent> {
           structuredClone({
             type: GameEventType.MOVE,
             message: "Next Player!",
-            legalMoves: BoardHelper.determineLegalMoves(
+            legalMoves: BoardHelper.determineLegalSelections(
               this.state.board,
               this.state.activePlayer
             ),
@@ -142,21 +130,33 @@ export class Game extends Observable<GameEvent> {
   }
   private select(square: Square) {
     BoardHelper.unselectAll(this.state.board);
-    square.selected = BoardHelper.isLegalSelection(
-      this.state.activePlayer,
-      square
-    );
-    this.notifyAll(
-      structuredClone({
-        type: GameEventType.SELECT,
-        message: `OK`,
-        legalMoves: BoardHelper.determineLegalMoves(
-          this.state.board,
-          this.state.activePlayer
-        ),
-        ...this.state,
-      })
-    );
+    if (
+      BoardHelper.isLegalSelection(
+        this.state.board,
+        this.state.activePlayer,
+        square
+      )
+    ) {
+      square.selected = BoardHelper.isLegalSelection(
+        this.state.board,
+        this.state.activePlayer,
+        square
+      );
+
+      this.notifyAll(
+        structuredClone({
+          type: GameEventType.SELECT,
+          message: `OK`,
+          legalMoves: BoardHelper.determineLegalMoves(
+            this.state.board,
+            this.state.activePlayer
+          ),
+          ...this.state,
+        })
+      );
+    } else {
+      this.unselect();
+    }
   }
   private changeTurns() {
     this.state.activePlayer = this.state.players.find(
@@ -177,5 +177,20 @@ export class Game extends Observable<GameEvent> {
       activePlayer: players[0],
     };
     return state;
+  }
+
+  private unselect() {
+    BoardHelper.unselectAll(this.state.board);
+    this.notifyAll(
+      structuredClone({
+        type: GameEventType.UNSELECT,
+        message: "OK",
+        legalMoves: BoardHelper.determineLegalSelections(
+          this.state.board,
+          this.state.activePlayer
+        ),
+        ...this.state,
+      })
+    );
   }
 }

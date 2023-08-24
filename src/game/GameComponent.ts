@@ -15,7 +15,7 @@ export class GameComponent implements Viewable{
         this.view = new GameView(this.controller)
         this.model.subscribe(this.view)
 
-        this.model.onStart(); // TODO, maybe have a RULES modal with a start button
+        this.model.start(); // TODO, maybe have a RULES modal with a start button
     }
     get component(): HTMLElement {
         return this.view.component

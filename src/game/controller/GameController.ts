@@ -9,12 +9,12 @@ export class GameController {
     destinationY: number
   ) {}
   select(x: number, y: number) {
-    this.game.onSelect(x, y)
+    this.game.pick(x, y)
   }
   undo() {
     this.game.undo()
   }
   endGame() {
-    this.game.onEnd()
+    this.game.end()
   }
 }

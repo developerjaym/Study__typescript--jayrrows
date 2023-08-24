@@ -5,11 +5,11 @@ import { SquareDrawer } from "./SquareDrawer.js"
 export class TextSquareDrawer implements SquareDrawer {
     private pieceToTextMap = new Map<Piece | null, string>()
     constructor() {
-        this.pieceToTextMap.set(Piece.ALL, "*")
-        this.pieceToTextMap.set(Piece.KING, "K")
-        this.pieceToTextMap.set(Piece.VERTICAL, "|")
-        this.pieceToTextMap.set(Piece.HORIZONTAL, "--")
-        this.pieceToTextMap.set(Piece.DIAGONAL, "X")
+        this.pieceToTextMap.set(Piece.ALL, "✷")
+        this.pieceToTextMap.set(Piece.KING, "👑")
+        this.pieceToTextMap.set(Piece.VERTICAL, "⇵")
+        this.pieceToTextMap.set(Piece.HORIZONTAL, "⇆")
+        this.pieceToTextMap.set(Piece.DIAGONAL, "╳")
         this.pieceToTextMap.set(null, " ")
     }
     noteLegalMove(modelSquare: Square, uiSquare: HTMLElement): void {

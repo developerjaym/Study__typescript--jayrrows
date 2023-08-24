@@ -59,7 +59,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 50px;
+  font-size: calc(100vmin / 15);
 }
 .square--first {
   background: var(--first);
@@ -79,4 +79,38 @@ body {
 }
 .square--legal {
   filter: drop-shadow(var(--narrow) 0 var(--wide) var(--border));
+}
+
+
+dialog {
+    border: none;
+    border-radius: var(--border-radius);
+    padding: var(--narrow) var(--wide);
+}
+
+dialog header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    column-gap: var(--wide);
+    font-size: 1.5rem;
+}
+dialog header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+dialog header .header__option {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+}
+
+.icon {
+    border-radius: 100%;
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid var(--border);
+    text-align: center;
 }

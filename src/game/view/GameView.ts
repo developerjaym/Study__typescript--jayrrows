@@ -29,7 +29,7 @@ export class GameView implements Viewable {
   }
   onChange(event: GameEvent): void {
     if(event.type === GameEventType.END) {
-      this.htmlService.createDialog("Game Over", event.message, Icon.CELEBRATE, () => this.controller.endGame())
+      this.htmlService.showDialog("Game Over", event.message, Icon.CELEBRATE, () => this.controller.endGame())
       return
     }
     this.controls.onChange(event);

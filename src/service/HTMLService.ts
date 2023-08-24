@@ -12,13 +12,18 @@ export class HTMLService {
         element.textContent = textContent
         return element;
     }
-    createDialog(title: string, message: string, icon: Icon = Icon.MESSAGE, onClose: Function = () => {}): void {
+    showDialog(title: string, message: string, icon: Icon = Icon.MESSAGE, onClose: Function = () => {}): void {
         const dialog = this.document.createElement("dialog")
         const dialogHeader = document.createElement("header")
+        const headerIcon = document.createElement("span")
+        headerIcon.classList.add("icon", "header__icon")
+        headerIcon.textContent = icon
+        dialogHeader.append(headerIcon)
         const headerTitle = document.createElement("h2")
         headerTitle.textContent = title
         dialogHeader.append(headerTitle)
         const closeButton = document.createElement("button")
+        closeButton.classList.add("header__option")
         closeButton.textContent = Icon.CLOSE
         closeButton.addEventListener("click", () =>{ dialog.close(); dialog.remove(); onClose() })
         dialogHeader.append(closeButton)

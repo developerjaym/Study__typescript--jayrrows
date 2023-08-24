@@ -4,5 +4,6 @@ export enum Icon {
     THUMBS_DOWN = "👎",
     CELEBRATE = "🎉",
     MESSAGE = "✉",
-    CLOSE = "X"
+    CLOSE = "X",
+    HELP = "i"
 }

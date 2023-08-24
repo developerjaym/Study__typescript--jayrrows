@@ -2,6 +2,7 @@ import { HTMLService } from "../../service/HTMLService.js";
 import injector from "../../service/Injector.js";
 import { GameController } from "../controller/GameController.js";
 import { GameEvent } from "../model/GameEvent.js";
+import { Icon } from "./Icon.js";
 import { Viewable } from "./Viewable.js";
 
 export class ControlsUI implements Viewable {
@@ -22,7 +23,7 @@ export class ControlsUI implements Viewable {
     onChange(event: GameEvent): void {
     }
     private showHelpDialog() {
-        throw new Error("Method not implemented.");
+        this.htmlService.showDialog("Help", "It's a pretty simple game. You'll get it.", Icon.HELP)
 
     }
 }

@@ -14,15 +14,11 @@ interface GameState {
 }
 
 export class Game extends Observable<GameEvent> {
+  
   private state: GameState;
   constructor(existingState: GameState | null = null, private env: Environment = injector.getEnvironment()) {
     super();
-    const players = PlayerHelper.createPlayers()
-    this.state = existingState || {
-        board: {squares: BoardHelper.createFreshSquares(env.width, env.height, players)},
-        players,
-        activePlayer: players[0]
-    }
+    this.state = existingState || this.getFreshState()
     
   }
   onStart() {
@@ -49,6 +45,10 @@ export class Game extends Observable<GameEvent> {
       this.select(thisSquare)
     }
   }
+  onEnd() {
+    this.state = this.getFreshState()
+    this.onStart()
+  }
   private move(originSquare: Square, destinationSquare: Square) {    
     if(BoardHelper.isLegalMove(originSquare, destinationSquare)) {
       const movingPiece = originSquare.piece!
@@ -60,7 +60,8 @@ export class Game extends Observable<GameEvent> {
       originSquare.player = null
       BoardHelper.unselectAll(this.state.board)      
       if(destinationPiece === Piece.KING) {
-        this.notifyAll(structuredClone({type: GameEventType.END, message: "Game Over!", legalMoves: [], ...this.state}))
+        this.state.activePlayer.victor = true
+        this.notifyAll(structuredClone({type: GameEventType.END, message: `GAME OVER!\n\n${this.state.activePlayer.name} has won!`, legalMoves: [], ...this.state}))
       }
       else {
         this.changeTurns()
@@ -80,5 +81,14 @@ export class Game extends Observable<GameEvent> {
   }
   private changeTurns() {
     this.state.activePlayer = this.state.players.find(player => player.id !== this.state.activePlayer.id)!
+  }
+  private getFreshState(): GameState {
+    const players = PlayerHelper.createPlayers()
+    const state = {
+        board: {squares: BoardHelper.createFreshSquares(this.env.width, this.env.height, players)},
+        players,
+        activePlayer: players[0]
+    }
+    return state
   }
 }

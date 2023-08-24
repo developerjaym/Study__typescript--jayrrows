@@ -23,7 +23,7 @@ export class ControlsUI implements Viewable {
     onChange(event: GameEvent): void {
     }
     private showHelpDialog() {
-        this.htmlService.showDialog("Help", `Green goes first. The ${Icon.ALL_PIECE} piece can move one space in any direction. The first one you move will become a king (${Icon.KING_PIECE}). Kings can't move. Then Purple does the same. Then the next ${Icon.ALL_PIECE} you move will get promoted to a different piece depending on the direction you move. If you move diagonally, it will become a piece that can only move diagonally.`, Icon.HELP)
+        this.htmlService.showDialog("Help", `PIECES\n King (${Icon.KING_PIECE}): This piece cannot move.\n  Your goal is to capture your opponent's King.\n  The first piece you move becomes your King.\n Diagonal-Mover (${Icon.DIAGONAL_PIECE}): This piece can move one space diagonally.\n Vertical-Mover (${Icon.VERTICAL_PIECE}): This piece can move one space vertically.\n Horizontal-Mover (${Icon.HORIZONTAL_PIECE}): This piece can move one space horizontally.\n All-Mover (${Icon.ALL_PIECE}): This piece can move to any connecting square.\n  The first All-Mover you move is promoted to King.\n  Later, an All-Mover is promoted based on direction you moved it.\n   So, if moved diagonally, it becomes a Diagonal-Mover.\n\nPLAY\n Green goes first.\n Purple goes second.\n Moving a piece to an occupied square will capture the opponent's piece.`, Icon.HELP)
 
     }
 }

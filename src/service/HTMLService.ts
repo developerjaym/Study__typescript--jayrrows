@@ -28,7 +28,7 @@ export class HTMLService {
         closeButton.addEventListener("click", () =>{ dialog.close(); dialog.remove(); onClose() })
         dialogHeader.append(closeButton)
         dialog.append(dialogHeader)
-        const messageBody = document.createElement("p")
+        const messageBody = document.createElement("pre")
         messageBody.textContent = message
         dialog.append(messageBody)
         this.append(dialog)

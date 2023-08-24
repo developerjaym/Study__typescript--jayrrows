@@ -6,7 +6,7 @@ export interface Player {
 
 export class PlayerHelper {
     static createPlayers(): Player[] {
-        return [this.createPlayer(true, "Player One"), this.createPlayer(false, "Player Two")]
+        return [this.createPlayer(true, "Green"), this.createPlayer(false, "Purple")]
     }
     static createPlayer(id: boolean, name: string): Player {
         return {

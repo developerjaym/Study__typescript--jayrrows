@@ -130,3 +130,5 @@ dist
 .pnp.*
 
 public/js
+*.zip
+.DS_Store

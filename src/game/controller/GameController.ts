@@ -1,20 +1,28 @@
 import { Game } from "../model/Game.js";
+import { UserEvent, UserEventType } from "./UserEvent.js";
 
 export class GameController {
   constructor(private game: Game) {}
-  onMove(
-    originX: number,
-    originY: number,
-    destinationX: number,
-    destinationY: number
-  ) {}
-  select(x: number, y: number) {
+  onEvent(event: UserEvent) {
+    switch(event.type) {
+      case UserEventType.SELECT:
+        this.select(event.coordinate!.x, event.coordinate!.y)
+        break;
+      case UserEventType.UNDO:
+        this.undo();
+        break;
+      case UserEventType.END_GAME:
+        this.endGame()
+        break;
+    }
+  }
+  private select(x: number, y: number) {
     this.game.pick(x, y)
   }
-  undo() {
+  private undo() {
     this.game.undo()
   }
-  endGame() {
+  private endGame() {
     this.game.end()
   }
 }

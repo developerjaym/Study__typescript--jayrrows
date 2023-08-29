@@ -2,6 +2,7 @@ import { HTMLService } from "../../service/HTMLService.js";
 import injector from "../../service/Injector.js";
 import { Environment } from "../../service/environment/Environment.js";
 import { GameController } from "../controller/GameController.js";
+import { UserEventType } from "../controller/UserEvent.js";
 import { GameEvent } from "../model/GameEvent.js";
 import { Square } from "../model/Square.js";
 import { Viewable } from "./Viewable.js";
@@ -20,7 +21,7 @@ export class BoardUI implements Viewable {
             for(let x = 0; x < this.env.width; x++) {
                 const id = this.xyToID(x, y)
                 const square = this.htmlService.create("div", ["square"], id)
-                square.addEventListener("click", () => this.controller.select(x, y))
+                square.addEventListener("click", () => this.controller.onEvent({type: UserEventType.SELECT, coordinate: {x, y}}))
                 this.board.appendChild(square)
                 this.squares.set(id, square)
             }

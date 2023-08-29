@@ -1,6 +1,7 @@
 import { HTMLService } from "../../service/HTMLService.js";
 import injector from "../../service/Injector.js";
 import { GameController } from "../controller/GameController.js";
+import { UserEventType } from "../controller/UserEvent.js";
 import { GameEvent, GameEventType } from "../model/GameEvent.js";
 import { BoardUI } from "./BoardUI.js";
 import { ControlsUI } from "./ControlsUI.js";
@@ -29,7 +30,7 @@ export class GameView implements Viewable {
   }
   onChange(event: GameEvent): void {
     if(event.type === GameEventType.END) {
-      this.htmlService.showDialog("Game Over", event.message, Icon.CELEBRATE, () => this.controller.endGame())
+      this.htmlService.showDialog("Game Over", event.message, Icon.CELEBRATE, () => this.controller.onEvent({type: UserEventType.END_GAME}))
       return
     }
     this.controls.onChange(event);

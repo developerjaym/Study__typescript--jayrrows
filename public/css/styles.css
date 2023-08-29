@@ -66,6 +66,7 @@ body {
   justify-content: center;
   font-size: calc(100vmin / 15);
   border-radius: var(--border-radius);
+  text-shadow: 0 0 1px var(--legal);
 }
 .square--first {
   background: var(--first);
@@ -80,8 +81,9 @@ body {
   filter: none;
 }
 .square--selected {
-  color: white;
+  color: var(--highlight);
   box-shadow:  0px 0px var(--wide) var(--narrow) var(--highlight);
+  text-shadow: 0 0 1px var(--empty);
 }
 .square--legal {
   box-shadow: inset 0px 0px var(--wide) var(--narrow) var(--legal);

@@ -1,15 +1,15 @@
-import { Observable } from "../../observer/observer.js";
 import injector from "../../service/Injector.js";
 import { Environment } from "../../service/environment/Environment.js";
+import { AbstractGame } from "./AbstractGame.js";
 import { BoardHelper } from "./BoardHelper.js";
-import { GameEvent, GameEventType } from "./GameEvent.js";
+import { GameEventType } from "./GameEvent.js";
 import { GameState } from "./GameState.js";
 import { Snapshotter } from "./GameStateSnapshotter.js";
 import { Piece } from "./Piece.js";
 import { PlayerHelper } from "./Player.js";
 import { Square } from "./Square.js";
 
-export class Game extends Observable<GameEvent> {
+export class Game extends AbstractGame {
   private state: GameState;
   private snapshotter: Snapshotter;
   constructor(

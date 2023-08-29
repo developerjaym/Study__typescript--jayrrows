@@ -1,7 +1,8 @@
 import { Game } from "../model/Game.js";
+import { IController } from "./IController.js";
 import { UserEvent, UserEventType } from "./UserEvent.js";
 
-export class GameController {
+export class GameController implements IController{
   constructor(private game: Game) {}
   onEvent(event: UserEvent) {
     switch(event.type) {

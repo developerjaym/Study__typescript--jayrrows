@@ -2,37 +2,44 @@ import { HTMLService } from "../../service/HTMLService.js";
 import injector from "../../service/Injector.js";
 import { rules } from "../../text/Rules.js";
 import { GameController } from "../controller/GameController.js";
+import { IController } from "../controller/IController.js";
 import { UserEventType } from "../controller/UserEvent.js";
 import { GameEvent, GameEventType } from "../model/GameEvent.js";
 import { Icon } from "./Icon.js";
 import { Viewable } from "./Viewable.js";
+import { isRemoteGame, isRemoteTurnNext } from "./remoteUtilities.js";
 
 export class ControlsUI implements Viewable {
-    private helpDialogShown = false
+  private helpDialogShown = false;
+  private undoButton: HTMLElement;
+  private container: HTMLElement;
   constructor(
-    private controller: GameController,
+    private controller: IController,
     private htmlService: HTMLService = injector.getHtmlService()
-  ) {}
-  get component(): HTMLElement {
-    const container = this.htmlService.create(
+  ) {
+    this.container = this.htmlService.create(
       "section",
       ["controls"],
       "controls"
     );
-    const undoButton = this.htmlService.create(
+    this.undoButton = this.htmlService.create(
       "button",
       ["button", "button--game"],
       "undoButton",
       "Undo"
     );
-    undoButton.addEventListener("click", () => this.controller.onEvent({type: UserEventType.UNDO}));
+    this.undoButton.addEventListener("click", () =>
+      this.controller.onEvent({ type: UserEventType.UNDO })
+    );
     const endGameButton = this.htmlService.create(
       "button",
       ["button", "button--game"],
       "endGameButton",
       "End Game"
     );
-    endGameButton.addEventListener("click", () => this.controller.onEvent({type: UserEventType.END_GAME}));
+    endGameButton.addEventListener("click", () =>
+      this.controller.onEvent({ type: UserEventType.END_GAME })
+    );
     const helpButton = this.htmlService.create(
       "button",
       ["button", "button--game"],
@@ -40,13 +47,20 @@ export class ControlsUI implements Viewable {
       "Help"
     );
     helpButton.addEventListener("click", () => this.showHelpDialog());
-    container.append(undoButton, endGameButton, helpButton);
-    return container;
+    this.container.append(this.undoButton, endGameButton, helpButton);
+  }
+  get component(): HTMLElement {
+    return this.container;
   }
   onChange(event: GameEvent): void {
     if (event.type === GameEventType.START && !this.helpDialogShown) {
       this.showHelpDialog();
-      this.helpDialogShown = true
+      this.helpDialogShown = true;
+    }
+    if (isRemoteGame(event)) {
+      this.undoButton.setAttribute("disabled", "true");
+    } else {
+      this.undoButton.removeAttribute("disabled");
     }
   }
   private showHelpDialog() {

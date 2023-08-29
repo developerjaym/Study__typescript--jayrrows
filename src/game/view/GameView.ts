@@ -1,6 +1,6 @@
 import { HTMLService } from "../../service/HTMLService.js";
 import injector from "../../service/Injector.js";
-import { GameController } from "../controller/GameController.js";
+import { IController } from "../controller/IController.js";
 import { UserEventType } from "../controller/UserEvent.js";
 import { GameEvent, GameEventType } from "../model/GameEvent.js";
 import { BoardUI } from "./BoardUI.js";
@@ -13,7 +13,7 @@ export class GameView implements Viewable {
   controls: ControlsUI;
   container: HTMLElement;
   constructor(
-    private controller: GameController,
+    private controller: IController,
     private htmlService: HTMLService = injector.getHtmlService()
   ) {
     // TODO, create the HTML elements

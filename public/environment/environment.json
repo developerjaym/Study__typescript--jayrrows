@@ -2,5 +2,7 @@
     "appName": "Jayrrows",
     "rootElementId": "game",
     "width": 8,
-    "height": 8
+    "height": 8,
+    "pollPeriod": 1000,
+    "remoteUrl": "http://127.0.0.1:5000/game"
 }

@@ -132,3 +132,4 @@ dist
 public/js
 *.zip
 .DS_Store
+todo.txt

@@ -67,6 +67,7 @@ body {
   font-size: calc(100vmin / 15);
   border-radius: var(--border-radius);
   text-shadow: 0 0 1px var(--legal);
+  user-select: none;
 }
 .square--first {
   background: var(--first);

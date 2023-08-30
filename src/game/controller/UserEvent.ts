@@ -7,6 +7,7 @@ export enum UserEventType {
 }
 
 export interface UserEvent {
+    id?: string,
     type: UserEventType,
     origin?: string,
     coordinate?: Coordinate

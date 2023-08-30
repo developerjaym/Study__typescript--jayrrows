@@ -11,18 +11,20 @@ import { Viewable } from "./view/Viewable.js";
 
 export class GameComponent implements Viewable {
   private model;
-  private controller: IController;
   private view;
   constructor(private urlService = injector.getURLService()) {
     this.model = new Game();
-    this.controller = new GameController(this.model);
+    let gameController = new GameController(this.model);
+    
     if(this.urlService.getSearchParam("hostId")) {
         // must be a remote game
-        const remoteListener = new RemoteListener(this.controller)
-        this.controller = new RemoteController(this.controller, new RemoteSender())
+        const remoteListener = new RemoteListener(gameController)
+        const remoteController = new RemoteController(gameController, new RemoteSender())
         remoteListener.start()
+        this.view = new GameView(remoteController);
+    } else {
+      this.view = new GameView(gameController)
     }
-    this.view = new GameView(this.controller);
     this.model.subscribe(this.view);
     this.model.start();
     

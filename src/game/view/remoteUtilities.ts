@@ -2,17 +2,21 @@ import injector from "../../service/Injector.js";
 import { UserService } from "../../service/UserService.js";
 import { GameEvent } from "../model/GameEvent.js";
 
-const isRemoteGame = (event: GameEvent) => {
-  return event.players.some(player => Boolean(player.clientId))
+const isRemoteGame = (event: GameEvent, urlService = injector.getURLService()) => {
+  return Boolean(urlService.getSearchParam("hostId")?.length)
 }
 
 const isRemoteTurnNext = async (
   event: GameEvent,
-  userService: UserService = injector.getUserService()
+  userService: UserService = injector.getUserService(),
+  urlService = injector.getURLService()
 ) => {
-    const atLeastOnePlayerIsRemote = isRemoteGame(event)
-    const thisMachineIsNotActivePlayer = event.activePlayer.clientId !== await userService.getUserId()
-    return atLeastOnePlayerIsRemote && thisMachineIsNotActivePlayer
+    const isRemote = isRemoteGame(event)
+    const isHost = urlService.getSearchParam("hostId") !== await userService.getUserId()
+   
+    const thisMachineIsNotActivePlayer = (isHost && event.activePlayer.id) || (!isHost && !event.activePlayer.id) // id is true if GREEN, player is HOST if they are first, GREEN goes first, ergo this should work
+    
+    return isRemote && thisMachineIsNotActivePlayer
 };
 
 

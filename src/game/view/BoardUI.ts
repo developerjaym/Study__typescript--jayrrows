@@ -26,7 +26,7 @@ export class BoardUI implements Viewable {
     for (let y = 0; y < this.env.height; y++) {
       for (let x = 0; x < this.env.width; x++) {
         const id = this.xyToID(x, y);
-        const square = this.htmlService.create("div", ["square"], id);
+        const square = this.htmlService.create("button", ["square"], id);
         square.addEventListener("click", () =>
           this.controller.onEvent({
             type: UserEventType.SELECT,
@@ -54,9 +54,13 @@ export class BoardUI implements Viewable {
       )
     );
     isRemoteTurnNext(event).then((yes) => {
-      Array.from(this.squares.values()).forEach((button) =>
-        button.setAttribute("disabled", `${yes}`)
-      );
+      Array.from(this.squares.values()).forEach((button) => {
+        if (yes) {
+          button.setAttribute("disabled", `true`);
+        } else {
+          button.removeAttribute("disabled")
+        }
+      });
     });
   }
   private xyToID(x: number, y: number): string {

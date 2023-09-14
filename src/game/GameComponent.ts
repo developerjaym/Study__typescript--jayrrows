@@ -21,6 +21,7 @@ export class GameComponent implements Viewable {
         const remoteListener = new RemoteListener(gameController)
         const remoteController = new RemoteController(gameController, new RemoteSender())
         remoteListener.start()
+        // TODO load initial data
         this.view = new GameView(remoteController);
     } else {
       this.view = new GameView(gameController)

@@ -60,7 +60,7 @@ export class ControlsUI implements Viewable {
       this.urlService.route("hostId", await this.userService.getUserId())
     })
 
-    this.container.append(this.undoButton, endGameButton, helpButton, remoteGameButton);
+    this.container.append(this.undoButton, endGameButton, helpButton);//, remoteGameButton);
   }
   get component(): HTMLElement {
     return this.container;

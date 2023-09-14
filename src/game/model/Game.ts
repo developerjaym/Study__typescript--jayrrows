@@ -41,7 +41,7 @@ export class Game extends AbstractGame {
     const thisSquare = BoardHelper.getSquare(this.state.board, x, y);
     if (
       previouslySelectedSquare &&
-      thisSquare.player === this.state.activePlayer
+      !BoardHelper.isLegalMove(previouslySelectedSquare, thisSquare)
     ) {
       // Player is likely trying to change their selection
       this.unselect();
@@ -74,7 +74,6 @@ export class Game extends AbstractGame {
     this.start();
   }
   private move(originSquare: Square, destinationSquare: Square) {
-    if (BoardHelper.isLegalMove(originSquare, destinationSquare)) {
       const movingPiece = originSquare.piece!;
       const destinationPiece = destinationSquare.piece;
       const newPiece = BoardHelper.determinePromotion(
@@ -113,20 +112,6 @@ export class Game extends AbstractGame {
           })
         );
       }
-    } else {
-      //    create error event and set helpful message
-      this.notifyAll(
-        structuredClone({
-          type: GameEventType.ERROR,
-          message: `This move is illegal.`,
-          legalMoves: BoardHelper.determineLegalMoves(
-            this.state.board,
-            this.state.activePlayer
-          ),
-          ...this.state,
-        })
-      );
-    }
   }
   private select(square: Square) {
     BoardHelper.unselectAll(this.state.board);

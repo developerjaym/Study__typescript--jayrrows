@@ -3,7 +3,7 @@ import injector from "../../service/Injector.js";
 import { Environment } from "../../service/environment/Environment.js";
 import { IController } from "../controller/IController.js";
 import { UserEventType } from "../controller/UserEvent.js";
-import { GameEvent } from "../model/GameEvent.js";
+import { GameEvent, GameEventType } from "../model/GameEvent.js";
 import { Square } from "../model/Square.js";
 import { Viewable } from "./Viewable.js";
 import { SquareDrawer } from "./drawer/square/SquareDrawer.js";
@@ -27,12 +27,18 @@ export class BoardUI implements Viewable {
       for (let x = 0; x < this.env.width; x++) {
         const id = this.xyToID(x, y);
         const square = this.htmlService.create("button", ["square"], id);
-        square.addEventListener("click", () =>
+        const handleMove = () =>
           this.controller.onEvent({
             type: UserEventType.SELECT,
             coordinate: { x, y },
-          })
-        );
+          });
+        square.addEventListener("drop", handleMove);
+        square.addEventListener("dragstart", handleMove);
+        square.addEventListener("dragover", (e) => {
+          e.preventDefault();
+        });
+        square.addEventListener("click", handleMove);
+
         this.board.appendChild(square);
         this.squares.set(id, square);
       }
@@ -41,10 +47,14 @@ export class BoardUI implements Viewable {
   get component(): HTMLElement {
     return this.board;
   }
-  onChange(event: GameEvent): void {
+  onChange(event: GameEvent): void {    
+    const isLegalMove = (square: Square, legalMoves: Square[]) => {
+      return legalMoves.some(legalMove => legalMove.coordinate.x === square.coordinate.x && legalMove.coordinate.y === square.coordinate.y)
+    }
     event.board.squares
       .flat()
-      .forEach((modelSquare) => this.updateSquare(modelSquare));
+      .forEach((modelSquare) => this.updateSquare(modelSquare, event.type, isLegalMove(modelSquare, event.legalMoves)));
+
     event.legalMoves.forEach((legalMove) =>
       this.squareDrawer.noteLegalMove(
         legalMove,
@@ -58,7 +68,7 @@ export class BoardUI implements Viewable {
         if (yes) {
           button.setAttribute("disabled", `true`);
         } else {
-          button.removeAttribute("disabled")
+          button.removeAttribute("disabled");
         }
       });
     });
@@ -66,10 +76,14 @@ export class BoardUI implements Viewable {
   private xyToID(x: number, y: number): string {
     return `square__${x}-${y}`;
   }
-  private updateSquare(modelSquare: Square): void {
+  private updateSquare(modelSquare: Square, eventType: GameEventType, isLegalMove: boolean): void {
     const uiSquare = this.squares.get(
       this.xyToID(modelSquare.coordinate.x, modelSquare.coordinate.y)
     )!;
     this.squareDrawer.draw(modelSquare, uiSquare);
+    uiSquare.draggable = modelSquare.selected || (isLegalMove && [GameEventType.START, GameEventType.UNDO, GameEventType.UNSELECT, GameEventType.MOVE].includes(eventType))
+    if(isLegalMove) {
+      this.squareDrawer.noteLegalMove(modelSquare, uiSquare)
+    }
   }
 }
